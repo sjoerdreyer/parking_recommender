@@ -353,9 +353,9 @@ def render_card(row: pd.Series, rank: int):
 
         if pd.isna(opening_summary) or str(opening_summary).strip() == "":
             if pd.notna(row.get("open_24_7")) and bool(row.get("open_24_7")):
-                opening_summary = "Open 24/7"
+                opening_summary = "24/7"
             else:
-                opening_summary = "Opening hours not available"
+                opening_summary = "hours not available"
 
         st.caption(f"Opening: {opening_summary}")
 
