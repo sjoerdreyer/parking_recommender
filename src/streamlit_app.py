@@ -247,9 +247,12 @@ def inject_mobile_css():
             background: #FFFFFF;
             border: 1px solid #E2E8F0;
             border-radius: 20px;
-            padding: 14px;
-            margin-bottom: 12px;
-            box-shadow: 0 8px 20px rgba(15,23,42,0.06);
+            padding: 16px;
+            margin-bottom: 14px;
+
+            box-shadow: 
+                0 2px 6px rgba(0,0,0,0.04),
+                0 10px 24px rgba(0,0,0,0.06);
         }
 
         .parking-name {
@@ -355,7 +358,7 @@ def render_card(row: pd.Series, rank: int):
             if pd.notna(row.get("open_24_7")) and bool(row.get("open_24_7")):
                 opening_summary = "24/7"
             else:
-                opening_summary = "not available"
+                opening_summary = "not available" 
 
         st.caption(f"Opening hours: {opening_summary}")
 
