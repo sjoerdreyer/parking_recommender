@@ -349,7 +349,15 @@ def render_card(row: pd.Series, rank: int):
         with c4:
             st.metric("Capacity", fmt(row["parking_capacity"], 0))
 
-        st.caption(f"Opening: {row.get('opening_hours_summary', 'No data')}")
+        opening_summary = row.get("opening_hours_summary")
+
+        if pd.isna(opening_summary) or str(opening_summary).strip() == "":
+            if pd.notna(row.get("open_24_7")) and bool(row.get("open_24_7")):
+                opening_summary = "Open 24/7"
+            else:
+                opening_summary = "Opening hours not available"
+
+        st.caption(f"Opening: {opening_summary}")
 
         st.markdown(
             f"""
