@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Parking Map Leaflet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css"
+  />
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css"
+  />
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+    }
+
+    #map {
+      width: 100%;
+      height: 100vh;
+    }
+
+    .parking-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid white;
+      box-shadow: 0 0 4px rgba(0,0,0,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 16px;
+      color: white;
+      text-align: center;
+    }
+
+    .legend {
+      background: white;
+      padding: 12px;
+      border: 2px solid grey;
+      border-radius: 8px;
+      line-height: 1.5;
+      font-size: 14px;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+  <script>
+    const parkingData = [{"facility_name": "Garage Centraal (Arnhem)", "city": "Arnhem", "matched_office": "TenneT", "office_address": "Utrechtseweg 310, 6812 AR Arnhem", "latitude": 51.984411, "longitude": 5.899326, "distance_km": 0.088, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 172.0, "parking_capacity": 1050.0, "occupancy_pct": 83.6, "free_pct": 16.4, "opening_hours_summary": NaN, "marker_color": "orange"}, {"facility_name": "Garage Musis (Arnhem)", "city": "Arnhem", "matched_office": "TenneT", "office_address": "Utrechtseweg 310, 6812 AR Arnhem", "latitude": 51.981698, "longitude": 5.913364, "distance_km": 1.073, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 127.0, "parking_capacity": 690.0, "occupancy_pct": 81.6, "free_pct": 18.4, "opening_hours_summary": NaN, "marker_color": "orange"}, {"facility_name": "Garage De Grifthoek (Utrecht)", "city": "Utrecht", "matched_office": "Gemeente Utrecht", "office_address": "Stadsplateau 1, 3521 AZ Utrecht", "latitude": 52.09805, "longitude": 5.126233, "distance_km": 0.881, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 65.0, "parking_capacity": 230.0, "occupancy_pct": 71.7, "free_pct": 28.3, "opening_hours_summary": NaN, "marker_color": "orange"}, {"facility_name": "Garage Rozet (Arnhem)", "city": "Arnhem", "matched_office": "TenneT", "office_address": "Utrechtseweg 310, 6812 AR Arnhem", "latitude": 51.979481, "longitude": 5.906031, "distance_km": 0.802, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 129.0, "parking_capacity": 450.0, "occupancy_pct": 71.3, "free_pct": 28.7, "opening_hours_summary": NaN, "marker_color": "orange"}, {"facility_name": "Burgemeester van Roijensingel (Zwolle)", "city": "Zwolle", "matched_office": "Gemeente Zwolle", "office_address": "Grote Kerkplein 15, 8011 PK Zwolle", "latitude": 52.507872, "longitude": 6.094565, "distance_km": 1.264, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 62.0, "parking_capacity": 173.0, "occupancy_pct": 64.2, "free_pct": 35.8, "opening_hours_summary": NaN, "marker_color": "gold"}, {"facility_name": "P+R Stationsweg (Breda)", "city": "Breda", "matched_office": "Gemeente Breda", "office_address": "Claudius Prinsenlaan 10, 4811 DJ Breda", "latitude": 51.595, "longitude": 4.78184, "distance_km": 2.734, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 14.0, "parking_capacity": 39.0, "occupancy_pct": 64.1, "free_pct": 35.9, "opening_hours_summary": NaN, "marker_color": "gold"}, {"facility_name": "Parkeergarage Pas de Deux (Zwolle)", "city": "Zwolle", "matched_office": "Gemeente Zwolle", "office_address": "Grote Kerkplein 15, 8011 PK Zwolle", "latitude": 52.503617, "longitude": 6.091695, "distance_km": 1.58, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 73.0, "parking_capacity": 195.0, "occupancy_pct": 62.6, "free_pct": 37.4, "opening_hours_summary": NaN, "marker_color": "gold"}, {"facility_name": "Parkeergarage Lübeckplein (Zwolle)", "city": "Zwolle", "matched_office": "Gemeente Zwolle", "office_address": "Grote Kerkplein 15, 8011 PK Zwolle", "latitude": 52.503792, "longitude": 6.088352, "distance_km": 1.491, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 171.0, "parking_capacity": 355.0, "occupancy_pct": 51.8, "free_pct": 48.2, "opening_hours_summary": NaN, "marker_color": "gold"}, {"facility_name": "Garage P5 Vredenburg (Utrecht)", "city": "Utrecht", "matched_office": "Gemeente Utrecht", "office_address": "Stadsplateau 1, 3521 AZ Utrecht", "latitude": 52.091459, "longitude": 5.113454, "distance_km": 0.549, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 632.0, "parking_capacity": 1232.0, "occupancy_pct": 48.7, "free_pct": 51.3, "opening_hours_summary": NaN, "marker_color": "gold"}, {"facility_name": "Garage Velperplein (Arnhem)", "city": "Arnhem", "matched_office": "TenneT", "office_address": "Utrechtseweg 310, 6812 AR Arnhem", "latitude": 51.984368, "longitude": 5.912586, "distance_km": 0.954, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 76.0, "parking_capacity": 147.0, "occupancy_pct": 48.3, "free_pct": 51.7, "opening_hours_summary": NaN, "marker_color": "gold"}, {"facility_name": "Garage Hoog Catharijne P1 (utrecht)", "city": "Utrecht", "matched_office": "Gemeente Utrecht", "office_address": "Stadsplateau 1, 3521 AZ Utrecht", "latitude": 52.089612, "longitude": 5.113428, "distance_km": 0.558, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 216.0, "parking_capacity": 341.0, "occupancy_pct": 36.7, "free_pct": 63.3, "opening_hours_summary": NaN, "marker_color": "green"}, {"facility_name": "Garage Kruisstraat (Utrecht)", "city": "Utrecht", "matched_office": "Gemeente Utrecht", "office_address": "Stadsplateau 1, 3521 AZ Utrecht", "latitude": 52.09373, "longitude": 5.129327, "distance_km": 0.638, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 66.0, "parking_capacity": 102.0, "occupancy_pct": 35.3, "free_pct": 64.7, "opening_hours_summary": NaN, "marker_color": "green"}, {"facility_name": "Garage P3 Radboud (Utrecht)", "city": "Utrecht", "matched_office": "Gemeente Utrecht", "office_address": "Stadsplateau 1, 3521 AZ Utrecht", "latitude": 52.089804, "longitude": 5.113256, "distance_km": 0.565, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 280.0, "parking_capacity": 423.0, "occupancy_pct": 33.8, "free_pct": 66.2, "opening_hours_summary": NaN, "marker_color": "green"}, {"facility_name": "Garage P4 Stationsstraat (Utrecht)", "city": "Utrecht", "matched_office": "Gemeente Utrecht", "office_address": "Stadsplateau 1, 3521 AZ Utrecht", "latitude": 52.0913, "longitude": 5.11184, "distance_km": 0.657, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 261.0, "parking_capacity": 374.0, "occupancy_pct": 30.2, "free_pct": 69.8, "opening_hours_summary": NaN, "marker_color": "green"}, {"facility_name": "Garage Hoog Catharijne P2 (Utrecht)", "city": "Utrecht", "matched_office": "Gemeente Utrecht", "office_address": "Stadsplateau 1, 3521 AZ Utrecht", "latitude": 52.089612, "longitude": 5.113428, "distance_km": 0.558, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 217.0, "parking_capacity": 306.0, "occupancy_pct": 29.1, "free_pct": 70.9, "opening_hours_summary": NaN, "marker_color": "green"}, {"facility_name": "Parkeergarage Diezerpoort (Zwolle)", "city": "Zwolle", "matched_office": "Gemeente Zwolle", "office_address": "Grote Kerkplein 15, 8011 PK Zwolle", "latitude": 52.517227, "longitude": 6.100186, "distance_km": 1.164, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 418.0, "parking_capacity": 562.0, "occupancy_pct": 25.6, "free_pct": 74.4, "opening_hours_summary": NaN, "marker_color": "green"}, {"facility_name": "Parkeergarage Emmawijk - Dek (Zwolle)", "city": "Zwolle", "matched_office": "Gemeente Zwolle", "office_address": "Grote Kerkplein 15, 8011 PK Zwolle", "latitude": 52.509209, "longitude": 6.086367, "distance_km": 0.874, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 151.0, "parking_capacity": 199.0, "occupancy_pct": 24.1, "free_pct": 75.9, "opening_hours_summary": NaN, "marker_color": "green"}, {"facility_name": "P+R Station (Breda)", "city": "Breda", "matched_office": "Gemeente Breda", "office_address": "Claudius Prinsenlaan 10, 4811 DJ Breda", "latitude": 51.596259, "longitude": 4.777855, "distance_km": 2.788, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 451.0, "parking_capacity": 550.0, "occupancy_pct": 18.0, "free_pct": 82.0, "opening_hours_summary": NaN, "marker_color": "green"}, {"facility_name": "Parkeergarage Noordereiland - Dek (Zwolle)", "city": "Zwolle", "matched_office": "Gemeente Zwolle", "office_address": "Grote Kerkplein 15, 8011 PK Zwolle", "latitude": 52.515666, "longitude": 6.095621, "distance_km": 0.863, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 553.0, "parking_capacity": 670.0, "occupancy_pct": 17.5, "free_pct": 82.5, "opening_hours_summary": NaN, "marker_color": "green"}, {"facility_name": "Parkeergarage Katwoldeplein (Zwolle)", "city": "Zwolle", "matched_office": "Gemeente Zwolle", "office_address": "Grote Kerkplein 15, 8011 PK Zwolle", "latitude": 52.51436, "longitude": 6.086261, "distance_km": 0.35, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 566.0, "parking_capacity": 679.0, "occupancy_pct": 16.6, "free_pct": 83.4, "opening_hours_summary": NaN, "marker_color": "green"}, {"facility_name": "Garage P6 Rijnkade (Utrecht)", "city": "Utrecht", "matched_office": "Gemeente Utrecht", "office_address": "Stadsplateau 1, 3521 AZ Utrecht", "latitude": 52.090173, "longitude": 5.11464, "distance_km": 0.466, "open_24_7": "No", "open_weekend": "No", "open_late": "No", "available_spaces": 279.0, "parking_capacity": 279.0, "occupancy_pct": 0.0, "free_pct": 100.0, "opening_hours_summary": NaN, "marker_color": "green"}];
+    const officeData = [{"office_name": "Gemeente Breda", "address": "Claudius Prinsenlaan 10, 4811 DJ Breda", "lat": 51.5719, "lon": 4.7683}, {"office_name": "Gemeente Utrecht", "address": "Stadsplateau 1, 3521 AZ Utrecht", "lat": 52.0907, "lon": 5.1214}, {"office_name": "TenneT", "address": "Utrechtseweg 310, 6812 AR Arnhem", "lat": 51.9851, "lon": 5.8987}, {"office_name": "Gemeente Zwolle", "address": "Grote Kerkplein 15, 8011 PK Zwolle", "lat": 52.5168, "lon": 6.083}];
+
+    const map = L.map('map').setView([52.1631761904762, 5.560459761904761], 8);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const clusterGroup = L.markerClusterGroup();
+
+    function buildParkingIcon(color) {
+      return L.divIcon({
+        className: '',
+        html: `<div class="parking-icon" style="background:${color};">P</div>`,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+        popupAnchor: [0, -12]
+      });
+    }
+
+    function buildPopup(row) {
+      return `
+        <div style="width: 300px;">
+          <h3 style="margin:0 0 8px 0;">${row.facility_name}</h3>
+          <p><b>City:</b> ${row.city}</p>
+          <p><b>Office:</b> ${row.matched_office}</p>
+          <p><b>Distance to office (km):</b> ${row.distance_km}</p>
+          <hr>
+          <p><b>Free parking %:</b> ${row.free_pct}</p>
+          <p><b>Occupancy %:</b> ${row.occupancy_pct}</p>
+          <p><b>Available spaces:</b> ${row.available_spaces}</p>
+          <p><b>Parking capacity:</b> ${row.parking_capacity}</p>
+          <hr>
+          <p><b>Open 24/7:</b> ${row.open_24_7}</p>
+          <p><b>Open weekend:</b> ${row.open_weekend}</p>
+          <p><b>Open late:</b> ${row.open_late}</p>
+          <p><b>Opening summary:</b> ${row.opening_hours_summary || "Opening hours not available"}</p>
+        </div>
+      `;
+    }
+
+    parkingData.forEach(row => {
+      const marker = L.marker(
+        [row.latitude, row.longitude],
+        { icon: buildParkingIcon(row.marker_color) }
+      ).bindPopup(buildPopup(row));
+
+      marker.bindTooltip(row.facility_name);
+      clusterGroup.addLayer(marker);
+    });
+
+    map.addLayer(clusterGroup);
+
+    officeData.forEach(office => {
+      const marker = L.marker([office.lat, office.lon]).bindPopup(
+        `<b>${office.office_name}</b><br>${office.address}`
+      );
+      marker.bindTooltip(office.office_name);
+      marker.addTo(map);
+    });
+
+    const legend = L.control({position: 'bottomleft'});
+    legend.onAdd = function() {
+      const div = L.DomUtil.create('div', 'legend');
+      div.innerHTML = `
+        <b>Parking Occupancy Legend</b><br><br>
+        <span style="color:red;">●</span> Above 95% full<br>
+        <span style="color:orange;">●</span> 70% to 95% full<br>
+        <span style="color:gold;">●</span> 40% to 70% full<br>
+        <span style="color:green;">●</span> Below 40% full<br>
+        <span style="color:gray;">●</span> No occupancy data<br><br>
+        <b>P icon color</b> shows occupancy level
+      `;
+      return div;
+    };
+    legend.addTo(map);
+  </script>
+</body>
+</html>

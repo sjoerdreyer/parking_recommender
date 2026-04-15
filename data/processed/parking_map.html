@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_ad22187b67e5c1b136de5a814c60261f {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.1.0/MarkerCluster.Default.css"/>
+</head>
+<body>
+    
+    
+    <div style="
+        position: fixed;
+        bottom: 50px;
+        left: 50px;
+        width: 260px;
+        z-index: 9999;
+        background-color: white;
+        border: 2px solid grey;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 14px;
+    ">
+        <b>Parking Occupancy Legend</b><br><br>
+        <span style="color:red;">●</span> Above 95% full<br>
+        <span style="color:orange;">●</span> 70% to 95% full<br>
+        <span style="color:gold;">●</span> 40% to 70% full<br>
+        <span style="color:green;">●</span> Below 40% full<br>
+        <span style="color:gray;">●</span> No occupancy data<br><br>
+        <b>P icon color</b> shows occupancy level<br>
+        <b>Popup</b> shows status and live data
+    </div>
+    
+    
+            <div class="folium-map" id="map_ad22187b67e5c1b136de5a814c60261f" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_ad22187b67e5c1b136de5a814c60261f = L.map(
+                "map_ad22187b67e5c1b136de5a814c60261f",
+                {
+                    center: [52.1631761904762, 5.560459761904761],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 8,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_d2314072dd11941fff772f589d763c12 = L.tileLayer(
+                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 19,
+  "maxNativeZoom": 19,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors",
+  "subdomains": "abc",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_d2314072dd11941fff772f589d763c12.addTo(map_ad22187b67e5c1b136de5a814c60261f);
+        
+    
+            var marker_5f6d72d120a6733ff89d1ba5c58bf46e = L.marker(
+                [51.5719, 4.7683],
+                {
+}
+            ).addTo(map_ad22187b67e5c1b136de5a814c60261f);
+        
+    
+            var icon_ec02f6988865fc507c080694f5cbebfc = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "building",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_814775a0689d52da99bdac0f14d45243 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_44d50603d5d1b76080c325e620d8dd7a = $(`<div id="html_44d50603d5d1b76080c325e620d8dd7a" style="width: 100.0%; height: 100.0%;">Gemeente Breda<br>Claudius Prinsenlaan 10, 4811 DJ Breda</div>`)[0];
+                popup_814775a0689d52da99bdac0f14d45243.setContent(html_44d50603d5d1b76080c325e620d8dd7a);
+            
+        
+
+        marker_5f6d72d120a6733ff89d1ba5c58bf46e.bindPopup(popup_814775a0689d52da99bdac0f14d45243)
+        ;
+
+        
+    
+    
+            marker_5f6d72d120a6733ff89d1ba5c58bf46e.bindTooltip(
+                `<div>
+                     Gemeente Breda
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_5f6d72d120a6733ff89d1ba5c58bf46e.setIcon(icon_ec02f6988865fc507c080694f5cbebfc);
+            
+    
+            var marker_3d7cf74bdf26f460099f603ccf572b2f = L.marker(
+                [52.0907, 5.1214],
+                {
+}
+            ).addTo(map_ad22187b67e5c1b136de5a814c60261f);
+        
+    
+            var icon_7dbd962be3b7549e5a32aa663b3897aa = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "building",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b88747ba880fc58d8beaaaffa580dfa1 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_dbb998ef2e4bae2390e07c9341f146b6 = $(`<div id="html_dbb998ef2e4bae2390e07c9341f146b6" style="width: 100.0%; height: 100.0%;">Gemeente Utrecht<br>Stadsplateau 1, 3521 AZ Utrecht</div>`)[0];
+                popup_b88747ba880fc58d8beaaaffa580dfa1.setContent(html_dbb998ef2e4bae2390e07c9341f146b6);
+            
+        
+
+        marker_3d7cf74bdf26f460099f603ccf572b2f.bindPopup(popup_b88747ba880fc58d8beaaaffa580dfa1)
+        ;
+
+        
+    
+    
+            marker_3d7cf74bdf26f460099f603ccf572b2f.bindTooltip(
+                `<div>
+                     Gemeente Utrecht
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_3d7cf74bdf26f460099f603ccf572b2f.setIcon(icon_7dbd962be3b7549e5a32aa663b3897aa);
+            
+    
+            var marker_d15281a75cd4651c6a0acaad398deab3 = L.marker(
+                [51.9851, 5.8987],
+                {
+}
+            ).addTo(map_ad22187b67e5c1b136de5a814c60261f);
+        
+    
+            var icon_6c3200fbf75b3e1f9756de28842d307b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "building",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c4144b8b60cde10768ddf9773721ca77 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_61d3dc5fb7e7924537da9c5a96fcafc2 = $(`<div id="html_61d3dc5fb7e7924537da9c5a96fcafc2" style="width: 100.0%; height: 100.0%;">TenneT<br>Utrechtseweg 310, 6812 AR Arnhem</div>`)[0];
+                popup_c4144b8b60cde10768ddf9773721ca77.setContent(html_61d3dc5fb7e7924537da9c5a96fcafc2);
+            
+        
+
+        marker_d15281a75cd4651c6a0acaad398deab3.bindPopup(popup_c4144b8b60cde10768ddf9773721ca77)
+        ;
+
+        
+    
+    
+            marker_d15281a75cd4651c6a0acaad398deab3.bindTooltip(
+                `<div>
+                     TenneT
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_d15281a75cd4651c6a0acaad398deab3.setIcon(icon_6c3200fbf75b3e1f9756de28842d307b);
+            
+    
+            var marker_8fd4f103ecd4775d54bb57a4cce35bae = L.marker(
+                [52.5168, 6.083],
+                {
+}
+            ).addTo(map_ad22187b67e5c1b136de5a814c60261f);
+        
+    
+            var icon_836604de8db2e3bb811464e79264fb4a = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "building",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_cfa8038d0dcba3e9322ea7954894ac38 = L.popup({
+  "maxWidth": "100%",
+});
+
+        
+            
+                var html_8e46b381b6e4d609d549302e103b68f3 = $(`<div id="html_8e46b381b6e4d609d549302e103b68f3" style="width: 100.0%; height: 100.0%;">Gemeente Zwolle<br>Grote Kerkplein 15, 8011 PK Zwolle</div>`)[0];
+                popup_cfa8038d0dcba3e9322ea7954894ac38.setContent(html_8e46b381b6e4d609d549302e103b68f3);
+            
+        
+
+        marker_8fd4f103ecd4775d54bb57a4cce35bae.bindPopup(popup_cfa8038d0dcba3e9322ea7954894ac38)
+        ;
+
+        
+    
+    
+            marker_8fd4f103ecd4775d54bb57a4cce35bae.bindTooltip(
+                `<div>
+                     Gemeente Zwolle
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_8fd4f103ecd4775d54bb57a4cce35bae.setIcon(icon_836604de8db2e3bb811464e79264fb4a);
+            
+    
+            var marker_cluster_5129410efc8fda660f7eab144dc1c852 = L.markerClusterGroup(
+                {
+}
+            );
+        
+    
+            var marker_e2237b7cdb0654dcf6fae65ad3d08acf = L.marker(
+                [51.984411, 5.899326],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_d89c5eb9f25550603361abf30a83606c = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:orange;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_e673492e6a6deff68a759d6ec5dd3801 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_948d7e3271eef9647f0e96dfe3b76a76 = $(`<div id="html_948d7e3271eef9647f0e96dfe3b76a76" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Garage Centraal (Arnhem)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Arnhem</p>         <p><b>Office:</b> TenneT</p>         <p><b>Distance:</b> 0.09 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 16.4%</p>         <p><b>🔴 Occupancy %:</b> 83.6%</p>          <p><b>Available spaces:</b> 172</p>         <p><b>Capacity:</b> 1050</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_e673492e6a6deff68a759d6ec5dd3801.setContent(html_948d7e3271eef9647f0e96dfe3b76a76);
+            
+        
+
+        marker_e2237b7cdb0654dcf6fae65ad3d08acf.bindPopup(popup_e673492e6a6deff68a759d6ec5dd3801)
+        ;
+
+        
+    
+    
+            marker_e2237b7cdb0654dcf6fae65ad3d08acf.bindTooltip(
+                `<div>
+                     Garage Centraal (Arnhem)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_e2237b7cdb0654dcf6fae65ad3d08acf.setIcon(div_icon_d89c5eb9f25550603361abf30a83606c);
+            
+    
+            var marker_9bd47aea7304dea8853929f500c16bb9 = L.marker(
+                [51.981698, 5.913364],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_7523473d89bbbc638473fbd8b7d41a54 = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:orange;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_cf2d1474b223b3c04ccd63364dd53fc4 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_d0509ed573bf93d12817d75155a15688 = $(`<div id="html_d0509ed573bf93d12817d75155a15688" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Garage Musis (Arnhem)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Arnhem</p>         <p><b>Office:</b> TenneT</p>         <p><b>Distance:</b> 1.07 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 18.4%</p>         <p><b>🔴 Occupancy %:</b> 81.6%</p>          <p><b>Available spaces:</b> 127</p>         <p><b>Capacity:</b> 690</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_cf2d1474b223b3c04ccd63364dd53fc4.setContent(html_d0509ed573bf93d12817d75155a15688);
+            
+        
+
+        marker_9bd47aea7304dea8853929f500c16bb9.bindPopup(popup_cf2d1474b223b3c04ccd63364dd53fc4)
+        ;
+
+        
+    
+    
+            marker_9bd47aea7304dea8853929f500c16bb9.bindTooltip(
+                `<div>
+                     Garage Musis (Arnhem)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_9bd47aea7304dea8853929f500c16bb9.setIcon(div_icon_7523473d89bbbc638473fbd8b7d41a54);
+            
+    
+            var marker_231334ba2a91b1a9c4f6e1a141f490e2 = L.marker(
+                [52.09805, 5.126233],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_787fe7042cbf13b8a34e69cf0454b28c = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:orange;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_6a85f706159dcb9596d4fbcbe575cfac = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_efa2d6fc0d332230ed2d7d40fa3a3e74 = $(`<div id="html_efa2d6fc0d332230ed2d7d40fa3a3e74" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Garage De Grifthoek (Utrecht)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Utrecht</p>         <p><b>Office:</b> Gemeente Utrecht</p>         <p><b>Distance:</b> 0.88 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 28.3%</p>         <p><b>🔴 Occupancy %:</b> 71.7%</p>          <p><b>Available spaces:</b> 65</p>         <p><b>Capacity:</b> 230</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_6a85f706159dcb9596d4fbcbe575cfac.setContent(html_efa2d6fc0d332230ed2d7d40fa3a3e74);
+            
+        
+
+        marker_231334ba2a91b1a9c4f6e1a141f490e2.bindPopup(popup_6a85f706159dcb9596d4fbcbe575cfac)
+        ;
+
+        
+    
+    
+            marker_231334ba2a91b1a9c4f6e1a141f490e2.bindTooltip(
+                `<div>
+                     Garage De Grifthoek (Utrecht)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_231334ba2a91b1a9c4f6e1a141f490e2.setIcon(div_icon_787fe7042cbf13b8a34e69cf0454b28c);
+            
+    
+            var marker_1f3982d5516a241636747507613c0d4b = L.marker(
+                [51.979481, 5.906031],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_3477e3819ed6370a1da263de2b65b159 = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:orange;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_aa4e3128bfab4f6c88d0db802da442c2 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_ded641a815ac9ec1a68044354afec5f5 = $(`<div id="html_ded641a815ac9ec1a68044354afec5f5" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Garage Rozet (Arnhem)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Arnhem</p>         <p><b>Office:</b> TenneT</p>         <p><b>Distance:</b> 0.80 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 28.7%</p>         <p><b>🔴 Occupancy %:</b> 71.3%</p>          <p><b>Available spaces:</b> 129</p>         <p><b>Capacity:</b> 450</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_aa4e3128bfab4f6c88d0db802da442c2.setContent(html_ded641a815ac9ec1a68044354afec5f5);
+            
+        
+
+        marker_1f3982d5516a241636747507613c0d4b.bindPopup(popup_aa4e3128bfab4f6c88d0db802da442c2)
+        ;
+
+        
+    
+    
+            marker_1f3982d5516a241636747507613c0d4b.bindTooltip(
+                `<div>
+                     Garage Rozet (Arnhem)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_1f3982d5516a241636747507613c0d4b.setIcon(div_icon_3477e3819ed6370a1da263de2b65b159);
+            
+    
+            var marker_f2466f62086b6942ac9b4d5660c0c8f7 = L.marker(
+                [52.507872, 6.094565],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_e52a1f7e526fe06f179a7fc488ab84e1 = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:gold;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_5c3d793b1041d5b1585d6e36aaeeb962 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_8261e4bd290872edf9ab3bc34a37b5cc = $(`<div id="html_8261e4bd290872edf9ab3bc34a37b5cc" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Burgemeester van Roijensingel (Zwolle)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Zwolle</p>         <p><b>Office:</b> Gemeente Zwolle</p>         <p><b>Distance:</b> 1.26 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 35.8%</p>         <p><b>🔴 Occupancy %:</b> 64.2%</p>          <p><b>Available spaces:</b> 62</p>         <p><b>Capacity:</b> 173</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_5c3d793b1041d5b1585d6e36aaeeb962.setContent(html_8261e4bd290872edf9ab3bc34a37b5cc);
+            
+        
+
+        marker_f2466f62086b6942ac9b4d5660c0c8f7.bindPopup(popup_5c3d793b1041d5b1585d6e36aaeeb962)
+        ;
+
+        
+    
+    
+            marker_f2466f62086b6942ac9b4d5660c0c8f7.bindTooltip(
+                `<div>
+                     Burgemeester van Roijensingel (Zwolle)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_f2466f62086b6942ac9b4d5660c0c8f7.setIcon(div_icon_e52a1f7e526fe06f179a7fc488ab84e1);
+            
+    
+            var marker_ca985bab17ed1e0cac80fdbbd2349211 = L.marker(
+                [51.595, 4.78184],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_44ddb5a12523b12d0b211cdd194e1ff5 = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:gold;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_22ba13ff49e42d37aee574b1d69a8100 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_9d5e1370a9fc6f5e35f2c7687f610671 = $(`<div id="html_9d5e1370a9fc6f5e35f2c7687f610671" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">P+R Stationsweg (Breda)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Breda</p>         <p><b>Office:</b> Gemeente Breda</p>         <p><b>Distance:</b> 2.73 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 35.9%</p>         <p><b>🔴 Occupancy %:</b> 64.1%</p>          <p><b>Available spaces:</b> 14</p>         <p><b>Capacity:</b> 39</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_22ba13ff49e42d37aee574b1d69a8100.setContent(html_9d5e1370a9fc6f5e35f2c7687f610671);
+            
+        
+
+        marker_ca985bab17ed1e0cac80fdbbd2349211.bindPopup(popup_22ba13ff49e42d37aee574b1d69a8100)
+        ;
+
+        
+    
+    
+            marker_ca985bab17ed1e0cac80fdbbd2349211.bindTooltip(
+                `<div>
+                     P+R Stationsweg (Breda)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ca985bab17ed1e0cac80fdbbd2349211.setIcon(div_icon_44ddb5a12523b12d0b211cdd194e1ff5);
+            
+    
+            var marker_4a73e4c1cf8218d6fd2ddae0a602bcff = L.marker(
+                [52.503617, 6.091695],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_da65a970a26792623b4d6250759c1dfa = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:gold;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_9933aa3aaa85fb867a073316f4700006 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_f4dbe3464bf77690f9662533781d95ae = $(`<div id="html_f4dbe3464bf77690f9662533781d95ae" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Parkeergarage Pas de Deux (Zwolle)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Zwolle</p>         <p><b>Office:</b> Gemeente Zwolle</p>         <p><b>Distance:</b> 1.58 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 37.4%</p>         <p><b>🔴 Occupancy %:</b> 62.6%</p>          <p><b>Available spaces:</b> 73</p>         <p><b>Capacity:</b> 195</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_9933aa3aaa85fb867a073316f4700006.setContent(html_f4dbe3464bf77690f9662533781d95ae);
+            
+        
+
+        marker_4a73e4c1cf8218d6fd2ddae0a602bcff.bindPopup(popup_9933aa3aaa85fb867a073316f4700006)
+        ;
+
+        
+    
+    
+            marker_4a73e4c1cf8218d6fd2ddae0a602bcff.bindTooltip(
+                `<div>
+                     Parkeergarage Pas de Deux (Zwolle)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_4a73e4c1cf8218d6fd2ddae0a602bcff.setIcon(div_icon_da65a970a26792623b4d6250759c1dfa);
+            
+    
+            var marker_347f4543bd038850f40cf428043faead = L.marker(
+                [52.503792, 6.088352],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_55b21f68588932a5759c9bb1066b6cd4 = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:gold;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_b0bb5ff2bf56c3f2efbda0195f4d4430 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_d883591b0d98bfea0e5ff61c38444745 = $(`<div id="html_d883591b0d98bfea0e5ff61c38444745" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Parkeergarage Lübeckplein (Zwolle)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Zwolle</p>         <p><b>Office:</b> Gemeente Zwolle</p>         <p><b>Distance:</b> 1.49 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 48.2%</p>         <p><b>🔴 Occupancy %:</b> 51.8%</p>          <p><b>Available spaces:</b> 171</p>         <p><b>Capacity:</b> 355</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_b0bb5ff2bf56c3f2efbda0195f4d4430.setContent(html_d883591b0d98bfea0e5ff61c38444745);
+            
+        
+
+        marker_347f4543bd038850f40cf428043faead.bindPopup(popup_b0bb5ff2bf56c3f2efbda0195f4d4430)
+        ;
+
+        
+    
+    
+            marker_347f4543bd038850f40cf428043faead.bindTooltip(
+                `<div>
+                     Parkeergarage Lübeckplein (Zwolle)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_347f4543bd038850f40cf428043faead.setIcon(div_icon_55b21f68588932a5759c9bb1066b6cd4);
+            
+    
+            var marker_00dd3c0bc4ff1ffdab495be2dbc85963 = L.marker(
+                [52.091459, 5.113454],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_c178aabd3c9687e295530c11df543312 = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:gold;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_f36e48eab13e3787ce0076571d0eee3c = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_b1702460a36d1320789d31b08b53f110 = $(`<div id="html_b1702460a36d1320789d31b08b53f110" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Garage P5 Vredenburg (Utrecht)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Utrecht</p>         <p><b>Office:</b> Gemeente Utrecht</p>         <p><b>Distance:</b> 0.55 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 51.3%</p>         <p><b>🔴 Occupancy %:</b> 48.7%</p>          <p><b>Available spaces:</b> 632</p>         <p><b>Capacity:</b> 1232</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_f36e48eab13e3787ce0076571d0eee3c.setContent(html_b1702460a36d1320789d31b08b53f110);
+            
+        
+
+        marker_00dd3c0bc4ff1ffdab495be2dbc85963.bindPopup(popup_f36e48eab13e3787ce0076571d0eee3c)
+        ;
+
+        
+    
+    
+            marker_00dd3c0bc4ff1ffdab495be2dbc85963.bindTooltip(
+                `<div>
+                     Garage P5 Vredenburg (Utrecht)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_00dd3c0bc4ff1ffdab495be2dbc85963.setIcon(div_icon_c178aabd3c9687e295530c11df543312);
+            
+    
+            var marker_7c9801cc638e992762184be66f8f52bb = L.marker(
+                [51.984368, 5.912586],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_649a60919fe9e1204787d96d5b2a491c = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:gold;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_b34ca1af4d4298736c92e6b45b57247f = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_3779ec294b3bfea58b3b0373766180cf = $(`<div id="html_3779ec294b3bfea58b3b0373766180cf" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Garage Velperplein (Arnhem)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Arnhem</p>         <p><b>Office:</b> TenneT</p>         <p><b>Distance:</b> 0.95 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 51.7%</p>         <p><b>🔴 Occupancy %:</b> 48.3%</p>          <p><b>Available spaces:</b> 76</p>         <p><b>Capacity:</b> 147</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_b34ca1af4d4298736c92e6b45b57247f.setContent(html_3779ec294b3bfea58b3b0373766180cf);
+            
+        
+
+        marker_7c9801cc638e992762184be66f8f52bb.bindPopup(popup_b34ca1af4d4298736c92e6b45b57247f)
+        ;
+
+        
+    
+    
+            marker_7c9801cc638e992762184be66f8f52bb.bindTooltip(
+                `<div>
+                     Garage Velperplein (Arnhem)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_7c9801cc638e992762184be66f8f52bb.setIcon(div_icon_649a60919fe9e1204787d96d5b2a491c);
+            
+    
+            var marker_e69c2409168949aaacfddd2f0ac8e24b = L.marker(
+                [52.089612, 5.113678],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_f064f4cd34eb51ecd3323b0d90f7b42f = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:green;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_72bbc4bec7bb47a7fa41da193bf443f4 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_e01c1756370a27fe91a8c512e41352e4 = $(`<div id="html_e01c1756370a27fe91a8c512e41352e4" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Garage Hoog Catharijne P1 (utrecht)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Utrecht</p>         <p><b>Office:</b> Gemeente Utrecht</p>         <p><b>Distance:</b> 0.56 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 63.3%</p>         <p><b>🔴 Occupancy %:</b> 36.7%</p>          <p><b>Available spaces:</b> 216</p>         <p><b>Capacity:</b> 341</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_72bbc4bec7bb47a7fa41da193bf443f4.setContent(html_e01c1756370a27fe91a8c512e41352e4);
+            
+        
+
+        marker_e69c2409168949aaacfddd2f0ac8e24b.bindPopup(popup_72bbc4bec7bb47a7fa41da193bf443f4)
+        ;
+
+        
+    
+    
+            marker_e69c2409168949aaacfddd2f0ac8e24b.bindTooltip(
+                `<div>
+                     Garage Hoog Catharijne P1 (utrecht)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_e69c2409168949aaacfddd2f0ac8e24b.setIcon(div_icon_f064f4cd34eb51ecd3323b0d90f7b42f);
+            
+    
+            var marker_a79122315087c892fe3d1dc97435c6fd = L.marker(
+                [52.09373, 5.129327],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_cf3965d66788762b2b3cc196f4cad01d = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:green;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_64b1609879f94673c23022b806f18d5c = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_049cb56011471a375856183d18aae1ac = $(`<div id="html_049cb56011471a375856183d18aae1ac" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Garage Kruisstraat (Utrecht)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Utrecht</p>         <p><b>Office:</b> Gemeente Utrecht</p>         <p><b>Distance:</b> 0.64 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 64.7%</p>         <p><b>🔴 Occupancy %:</b> 35.3%</p>          <p><b>Available spaces:</b> 66</p>         <p><b>Capacity:</b> 102</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_64b1609879f94673c23022b806f18d5c.setContent(html_049cb56011471a375856183d18aae1ac);
+            
+        
+
+        marker_a79122315087c892fe3d1dc97435c6fd.bindPopup(popup_64b1609879f94673c23022b806f18d5c)
+        ;
+
+        
+    
+    
+            marker_a79122315087c892fe3d1dc97435c6fd.bindTooltip(
+                `<div>
+                     Garage Kruisstraat (Utrecht)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_a79122315087c892fe3d1dc97435c6fd.setIcon(div_icon_cf3965d66788762b2b3cc196f4cad01d);
+            
+    
+            var marker_8cf872049b2d4a525c1334659d6f842f = L.marker(
+                [52.089804, 5.113256],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_bf11c7e3ce151057c4f4e488631cc69d = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:green;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_7b50ea6f3eb2e977b5b2720a76893882 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_88db0e29cbfeb933eb1aeef0f9734a88 = $(`<div id="html_88db0e29cbfeb933eb1aeef0f9734a88" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Garage P3 Radboud (Utrecht)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Utrecht</p>         <p><b>Office:</b> Gemeente Utrecht</p>         <p><b>Distance:</b> 0.56 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 66.2%</p>         <p><b>🔴 Occupancy %:</b> 33.8%</p>          <p><b>Available spaces:</b> 280</p>         <p><b>Capacity:</b> 423</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_7b50ea6f3eb2e977b5b2720a76893882.setContent(html_88db0e29cbfeb933eb1aeef0f9734a88);
+            
+        
+
+        marker_8cf872049b2d4a525c1334659d6f842f.bindPopup(popup_7b50ea6f3eb2e977b5b2720a76893882)
+        ;
+
+        
+    
+    
+            marker_8cf872049b2d4a525c1334659d6f842f.bindTooltip(
+                `<div>
+                     Garage P3 Radboud (Utrecht)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_8cf872049b2d4a525c1334659d6f842f.setIcon(div_icon_bf11c7e3ce151057c4f4e488631cc69d);
+            
+    
+            var marker_7d2733b49d435344657badbc65ae9fce = L.marker(
+                [52.0913, 5.11184],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_8ac806d0f5d34e309ea6447290585d88 = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:green;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_3a4f335a442e163c3519027e510588ab = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_b4b2215e0df2f280acbe745b0bf8dca0 = $(`<div id="html_b4b2215e0df2f280acbe745b0bf8dca0" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Garage P4 Stationsstraat (Utrecht)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Utrecht</p>         <p><b>Office:</b> Gemeente Utrecht</p>         <p><b>Distance:</b> 0.66 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 69.8%</p>         <p><b>🔴 Occupancy %:</b> 30.2%</p>          <p><b>Available spaces:</b> 261</p>         <p><b>Capacity:</b> 374</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_3a4f335a442e163c3519027e510588ab.setContent(html_b4b2215e0df2f280acbe745b0bf8dca0);
+            
+        
+
+        marker_7d2733b49d435344657badbc65ae9fce.bindPopup(popup_3a4f335a442e163c3519027e510588ab)
+        ;
+
+        
+    
+    
+            marker_7d2733b49d435344657badbc65ae9fce.bindTooltip(
+                `<div>
+                     Garage P4 Stationsstraat (Utrecht)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_7d2733b49d435344657badbc65ae9fce.setIcon(div_icon_8ac806d0f5d34e309ea6447290585d88);
+            
+    
+            var marker_66fa6a7f6ffde13b9a12b2ca34752bd4 = L.marker(
+                [52.089612, 5.113178],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_4d3f007c4403886e8b3787380fe3e55d = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:green;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_be6d373715d84f218492a2ff857bfa92 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_322c267cf17fc9b945b84e17b30d00de = $(`<div id="html_322c267cf17fc9b945b84e17b30d00de" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Garage Hoog Catharijne P2 (Utrecht)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Utrecht</p>         <p><b>Office:</b> Gemeente Utrecht</p>         <p><b>Distance:</b> 0.56 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 70.9%</p>         <p><b>🔴 Occupancy %:</b> 29.1%</p>          <p><b>Available spaces:</b> 217</p>         <p><b>Capacity:</b> 306</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_be6d373715d84f218492a2ff857bfa92.setContent(html_322c267cf17fc9b945b84e17b30d00de);
+            
+        
+
+        marker_66fa6a7f6ffde13b9a12b2ca34752bd4.bindPopup(popup_be6d373715d84f218492a2ff857bfa92)
+        ;
+
+        
+    
+    
+            marker_66fa6a7f6ffde13b9a12b2ca34752bd4.bindTooltip(
+                `<div>
+                     Garage Hoog Catharijne P2 (Utrecht)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_66fa6a7f6ffde13b9a12b2ca34752bd4.setIcon(div_icon_4d3f007c4403886e8b3787380fe3e55d);
+            
+    
+            var marker_ef29363be05cbc290aade1011f6e207e = L.marker(
+                [52.517227, 6.100186],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_0dd213f926813d37cb133054c9132af3 = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:green;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_e0f9748f83bd7a6ff4a722f7f3bc2fcd = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_f5cc985822784641a2aece897d27a1d4 = $(`<div id="html_f5cc985822784641a2aece897d27a1d4" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Parkeergarage Diezerpoort (Zwolle)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Zwolle</p>         <p><b>Office:</b> Gemeente Zwolle</p>         <p><b>Distance:</b> 1.16 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 74.4%</p>         <p><b>🔴 Occupancy %:</b> 25.6%</p>          <p><b>Available spaces:</b> 418</p>         <p><b>Capacity:</b> 562</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_e0f9748f83bd7a6ff4a722f7f3bc2fcd.setContent(html_f5cc985822784641a2aece897d27a1d4);
+            
+        
+
+        marker_ef29363be05cbc290aade1011f6e207e.bindPopup(popup_e0f9748f83bd7a6ff4a722f7f3bc2fcd)
+        ;
+
+        
+    
+    
+            marker_ef29363be05cbc290aade1011f6e207e.bindTooltip(
+                `<div>
+                     Parkeergarage Diezerpoort (Zwolle)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_ef29363be05cbc290aade1011f6e207e.setIcon(div_icon_0dd213f926813d37cb133054c9132af3);
+            
+    
+            var marker_4238c95b50317a42c0f9f7195754bded = L.marker(
+                [52.509209, 6.086367],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_923106ee2f0cb37aa95614969124eca7 = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:green;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_ada03af8dafd66c08b8c5a9fdb1b1595 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_379dacf17912ea7aca8e1cf243ca338f = $(`<div id="html_379dacf17912ea7aca8e1cf243ca338f" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Parkeergarage Emmawijk - Dek (Zwolle)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Zwolle</p>         <p><b>Office:</b> Gemeente Zwolle</p>         <p><b>Distance:</b> 0.87 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 75.9%</p>         <p><b>🔴 Occupancy %:</b> 24.1%</p>          <p><b>Available spaces:</b> 151</p>         <p><b>Capacity:</b> 199</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_ada03af8dafd66c08b8c5a9fdb1b1595.setContent(html_379dacf17912ea7aca8e1cf243ca338f);
+            
+        
+
+        marker_4238c95b50317a42c0f9f7195754bded.bindPopup(popup_ada03af8dafd66c08b8c5a9fdb1b1595)
+        ;
+
+        
+    
+    
+            marker_4238c95b50317a42c0f9f7195754bded.bindTooltip(
+                `<div>
+                     Parkeergarage Emmawijk - Dek (Zwolle)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_4238c95b50317a42c0f9f7195754bded.setIcon(div_icon_923106ee2f0cb37aa95614969124eca7);
+            
+    
+            var marker_af4278d0d142b3b24f005b0e403b739d = L.marker(
+                [51.596259, 4.777855],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_e9cd593170f23d05eac3594e37851b9a = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:green;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_05346a0bf7b685cec54a3dc4bf077627 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_e31c1f3555a61c0584eb624c062786d4 = $(`<div id="html_e31c1f3555a61c0584eb624c062786d4" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">P+R Station (Breda)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Breda</p>         <p><b>Office:</b> Gemeente Breda</p>         <p><b>Distance:</b> 2.79 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 82.0%</p>         <p><b>🔴 Occupancy %:</b> 18.0%</p>          <p><b>Available spaces:</b> 451</p>         <p><b>Capacity:</b> 550</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_05346a0bf7b685cec54a3dc4bf077627.setContent(html_e31c1f3555a61c0584eb624c062786d4);
+            
+        
+
+        marker_af4278d0d142b3b24f005b0e403b739d.bindPopup(popup_05346a0bf7b685cec54a3dc4bf077627)
+        ;
+
+        
+    
+    
+            marker_af4278d0d142b3b24f005b0e403b739d.bindTooltip(
+                `<div>
+                     P+R Station (Breda)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_af4278d0d142b3b24f005b0e403b739d.setIcon(div_icon_e9cd593170f23d05eac3594e37851b9a);
+            
+    
+            var marker_c7ef67349bd24c16f03c8f52ac6f9afb = L.marker(
+                [52.515666, 6.095621],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_17cbc43ad2cbc5954132de1f9ab24eef = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:green;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_31bc57bf7ca0e15d4879dcad6aef9f67 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_590a575109a1557469b740dd03cfb30a = $(`<div id="html_590a575109a1557469b740dd03cfb30a" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Parkeergarage Noordereiland - Dek (Zwolle)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Zwolle</p>         <p><b>Office:</b> Gemeente Zwolle</p>         <p><b>Distance:</b> 0.86 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 82.5%</p>         <p><b>🔴 Occupancy %:</b> 17.5%</p>          <p><b>Available spaces:</b> 553</p>         <p><b>Capacity:</b> 670</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_31bc57bf7ca0e15d4879dcad6aef9f67.setContent(html_590a575109a1557469b740dd03cfb30a);
+            
+        
+
+        marker_c7ef67349bd24c16f03c8f52ac6f9afb.bindPopup(popup_31bc57bf7ca0e15d4879dcad6aef9f67)
+        ;
+
+        
+    
+    
+            marker_c7ef67349bd24c16f03c8f52ac6f9afb.bindTooltip(
+                `<div>
+                     Parkeergarage Noordereiland - Dek (Zwolle)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_c7ef67349bd24c16f03c8f52ac6f9afb.setIcon(div_icon_17cbc43ad2cbc5954132de1f9ab24eef);
+            
+    
+            var marker_c1e4819ec78cc80a3b12b67fc0b1c20a = L.marker(
+                [52.51436, 6.086261],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_5fcccdf3cd009582fcd41bd83650be30 = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:green;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_f1ed725437159bad51ef00249844ee43 = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_ad254f8e979f0c0720c5771696724a1a = $(`<div id="html_ad254f8e979f0c0720c5771696724a1a" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Parkeergarage Katwoldeplein (Zwolle)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Zwolle</p>         <p><b>Office:</b> Gemeente Zwolle</p>         <p><b>Distance:</b> 0.35 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 83.4%</p>         <p><b>🔴 Occupancy %:</b> 16.6%</p>          <p><b>Available spaces:</b> 566</p>         <p><b>Capacity:</b> 679</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_f1ed725437159bad51ef00249844ee43.setContent(html_ad254f8e979f0c0720c5771696724a1a);
+            
+        
+
+        marker_c1e4819ec78cc80a3b12b67fc0b1c20a.bindPopup(popup_f1ed725437159bad51ef00249844ee43)
+        ;
+
+        
+    
+    
+            marker_c1e4819ec78cc80a3b12b67fc0b1c20a.bindTooltip(
+                `<div>
+                     Parkeergarage Katwoldeplein (Zwolle)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_c1e4819ec78cc80a3b12b67fc0b1c20a.setIcon(div_icon_5fcccdf3cd009582fcd41bd83650be30);
+            
+    
+            var marker_9ddd91370691cc9c4a014860f4c64327 = L.marker(
+                [52.090173, 5.11464],
+                {
+}
+            ).addTo(marker_cluster_5129410efc8fda660f7eab144dc1c852);
+        
+    
+            var div_icon_8a0bba101073745f4323e16254d89296 = L.divIcon({
+  "html": "\n    \u003cdiv style=\"\n        background-color:green;\n        width:28px;\n        height:28px;\n        border-radius:50%;\n        border:2px solid white;\n        box-shadow:0 0 4px rgba(0,0,0,0.35);\n        display:flex;\n        align-items:center;\n        justify-content:center;\n        font-weight:bold;\n        font-size:16px;\n        color:white;\n    \"\u003eP\u003c/div\u003e\n    ",
+  "className": "empty",
+});
+        
+    
+        var popup_4b7e1b88be9fbcd01fd0695aa49ede8b = L.popup({
+  "maxWidth": 340,
+});
+
+        
+            
+                var html_678efda5ae06e85630bde19a76a4c6ca = $(`<div id="html_678efda5ae06e85630bde19a76a4c6ca" style="width: 100.0%; height: 100.0%;">     <div style="width: 310px;">         <h4 style="margin-bottom:8px;">Garage P6 Rijnkade (Utrecht)</h4>          <p><b>Status:</b> 🟢 Open now</p>         <p><b>City:</b> Utrecht</p>         <p><b>Office:</b> Gemeente Utrecht</p>         <p><b>Distance:</b> 0.47 km</p>          <hr>          <p><b>🟢 Free spaces %:</b> 100.0%</p>         <p><b>🔴 Occupancy %:</b> 0.0%</p>          <p><b>Available spaces:</b> 279</p>         <p><b>Capacity:</b> 279</p>          <hr>          <p><b>24/7:</b> No</p>         <p><b>Weekend:</b> No</p>         <p><b>Late:</b> No</p>     </div>     </div>`)[0];
+                popup_4b7e1b88be9fbcd01fd0695aa49ede8b.setContent(html_678efda5ae06e85630bde19a76a4c6ca);
+            
+        
+
+        marker_9ddd91370691cc9c4a014860f4c64327.bindPopup(popup_4b7e1b88be9fbcd01fd0695aa49ede8b)
+        ;
+
+        
+    
+    
+            marker_9ddd91370691cc9c4a014860f4c64327.bindTooltip(
+                `<div>
+                     Garage P6 Rijnkade (Utrecht)
+                 </div>`,
+                {
+  "sticky": true,
+}
+            );
+        
+    
+                marker_9ddd91370691cc9c4a014860f4c64327.setIcon(div_icon_8a0bba101073745f4323e16254d89296);
+            
+    
+            marker_cluster_5129410efc8fda660f7eab144dc1c852.addTo(map_ad22187b67e5c1b136de5a814c60261f);
+        
+    
+            var layer_control_4029c60a67791db0232370f572730e04_layers = {
+                base_layers : {
+                    "openstreetmap" : tile_layer_d2314072dd11941fff772f589d763c12,
+                },
+                overlays :  {
+                    "Parking garages" : marker_cluster_5129410efc8fda660f7eab144dc1c852,
+                },
+            };
+            let layer_control_4029c60a67791db0232370f572730e04 = L.control.layers(
+                layer_control_4029c60a67791db0232370f572730e04_layers.base_layers,
+                layer_control_4029c60a67791db0232370f572730e04_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": true,
+  "autoZIndex": true,
+}
+            ).addTo(map_ad22187b67e5c1b136de5a814c60261f);
+
+        
+</script>
+</html>
