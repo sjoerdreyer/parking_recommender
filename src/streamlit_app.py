@@ -431,27 +431,27 @@ def main():
     show_cards("Best options under 70%", under70)
     show_cards("Closest busy options", over70)
 
-    st.markdown('<div class="section-title">📧 Share recommendation</div>', unsafe_allow_html=True)
-    email = st.text_input("", placeholder="example@company.com")
+    # st.markdown('<div class="section-title">📧 Share recommendation</div>', unsafe_allow_html=True)
+    # email = st.text_input("", placeholder="example@company.com")
 
-    if st.button("Generate email"):
-        if not email:
-            st.warning("Enter an email first.")
-        else:
-            subject = f"Parking recommendation for {office}"
-            body = build_email_content(office, under70, over70)
-            mailto_link = build_mailto_link(email, subject, body)
+    # if st.button("Generate email"):
+    #     if not email:
+    #         st.warning("Enter an email first.")
+    #     else:
+    #         subject = f"Parking recommendation for {office}"
+    #         body = build_email_content(office, under70, over70)
+    #         mailto_link = build_mailto_link(email, subject, body)
 
-            st.markdown(
-                f"""
-                <a href="{mailto_link}">
-                    <button style="background-color:#2563EB;color:white;border:none;padding:12px 14px;border-radius:14px;font-weight:700;width:100%;cursor:pointer;">
-                        📨 Open email
-                    </button>
-                </a>
-                """,
-                unsafe_allow_html=True,
-            )
+    #         st.markdown(
+    #             f"""
+    #             <a href="{mailto_link}">
+    #                 <button style="background-color:#2563EB;color:white;border:none;padding:12px 14px;border-radius:14px;font-weight:700;width:100%;cursor:pointer;">
+    #                     📨 Open email
+    #                 </button>
+    #             </a>
+    #             """,
+    #             unsafe_allow_html=True,
+    #         )
 
 
 
