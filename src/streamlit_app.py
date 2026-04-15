@@ -194,7 +194,7 @@ def inject_mobile_css():
         }
 
         .stApp {
-            background: linear-gradient(180deg, #F8FAFC 0%, #EEF2FF 100%);
+            background: #DDE3EA;
         }
 
         .block-container {
@@ -308,6 +308,7 @@ def inject_mobile_css():
             font-weight: 700;
             color: #0F172A;
         }
+
 
         .stButton > button {
             width: 100%;
