@@ -76,19 +76,19 @@ def recommend_top3(df: pd.DataFrame, office: str) -> tuple[pd.DataFrame, pd.Data
     office_df = df[df["matched_office"] == office].copy()
     office_df = office_df[office_df["distance_km"].notna() & office_df["occupancy_pct"].notna()].copy()
 
-    under70 = (
-        office_df[office_df["occupancy_pct"] < 70]
+    under50 = (
+        office_df[office_df["occupancy_pct"] < 50]
         .sort_values(["distance_km", "occupancy_pct"], ascending=[True, True])
         .head(3)
     )
 
-    over70 = (
-        office_df[office_df["occupancy_pct"] >= 70]
+    over50 = (
+        office_df[office_df["occupancy_pct"] >= 50]
         .sort_values(["distance_km", "occupancy_pct"], ascending=[True, True])
         .head(3)
     )
 
-    return under70, over70
+    return under50, over50
 
 
 # =========================
@@ -120,7 +120,7 @@ def occupancy_badge_color(occupancy):
         return "#9CA3AF"
     if occupancy > 95:
         return "#EF4444"
-    if occupancy >= 70:
+    if occupancy >= 50:
         return "#F97316"
     if occupancy >= 40:
         return "#EAB308"
@@ -131,7 +131,7 @@ def build_mailto_link(email: str, subject: str, body: str) -> str:
     return f"mailto:{email}?subject={quote(subject)}&body={quote(body)}"
 
 
-def build_email_content(office: str, under70: pd.DataFrame, over70: pd.DataFrame) -> str:
+def build_email_content(office: str, under50: pd.DataFrame, over50: pd.DataFrame) -> str:
     now = datetime.now(TIMEZONE)
     date_str = now.strftime("%d %B %Y")
     time_str = now.strftime("%H:%M")
@@ -141,13 +141,13 @@ def build_email_content(office: str, under70: pd.DataFrame, over70: pd.DataFrame
         "",
         f"Here are the best parking options for {office} today ({date_str}) at {time_str}.",
         "",
-        "Top 3 under 70% occupancy:",
+        "Top 3 under 50% occupancy:",
     ]
 
-    if under70.empty:
+    if under50.empty:
         lines.append("- No good options found")
     else:
-        for i, (_, row) in enumerate(under70.iterrows(), 1):
+        for i, (_, row) in enumerate(under50.iterrows(), 1):
             lines.extend([
                 f"{i}. {row['facility_name']}",
                 f"Distance: {fmt(row['distance_km'], 2)} km",
@@ -160,10 +160,10 @@ def build_email_content(office: str, under70: pd.DataFrame, over70: pd.DataFrame
 
     lines.append("Top 3 closest busy options:")
 
-    if over70.empty:
+    if over50.empty:
         lines.append("- No options found")
     else:
-        for i, (_, row) in enumerate(over70.iterrows(), 1):
+        for i, (_, row) in enumerate(over50.iterrows(), 1):
             lines.extend([
                 f"{i}. {row['facility_name']}",
                 f"Distance: {fmt(row['distance_km'], 2)} km",
@@ -192,7 +192,19 @@ def inject_mobile_css():
         header[data-testid="stHeader"] {
             display: none;
         }
+        
+        .stLinkButton a {
+    background-color: #16A34A !important;
+    color: white !important;
+    border-radius: 12px !important;
+    font-weight: 699 !important;
+    border: none !important;
+}
 
+        .stLinkButton a:hover {
+            background-color: #15803D !important;
+            color: white !important;
+        }
         .stApp {
             background: #DDE3EA;
         }
@@ -225,7 +237,7 @@ def inject_mobile_css():
             margin-bottom: 1rem;
         }
 
-        .small-pill {
+       .small-pill {
             display: inline-block;
             background: #EEF2FF;
             color: #3730A3;
@@ -233,7 +245,7 @@ def inject_mobile_css():
             border-radius: 999px;
             font-size: 0.78rem;
             font-weight: 600;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.45rem;
         }
 
         .section-title {
@@ -262,15 +274,15 @@ def inject_mobile_css():
             margin-bottom: 8px;
         }
 
-        .badge {
-            display: inline-block;
-            color: white;
-            font-weight: 700;
-            font-size: 0.76rem;
-            padding: 5px 10px;
-            border-radius: 999px;
-            margin-bottom: 12px;
-        }
+            .badge {
+                display: inline-block;
+                color: white;
+                font-weight: 800;
+                font-size: 1rem;
+                padding: 10px 16px;
+                border-radius: 999px;
+                margin-bottom: 18px;
+            }
 
         .mini-text {
             color: #64748B;
@@ -287,7 +299,7 @@ def inject_mobile_css():
             border: none;
             border-radius: 14px;
             padding: 12px 14px;
-            font-weight: 700;
+            font-weight: 699;
             cursor: pointer;
         }
 
@@ -305,21 +317,24 @@ def inject_mobile_css():
 
         div[data-testid="stSelectbox"] > label,
         div[data-testid="stTextInput"] > label {
-            font-weight: 700;
+            font-weight: 699;
             color: #0F172A;
         }
 
 
         .stButton > button {
-            width: 100%;
-            border-radius: 14px;
-            font-weight: 700;
-            padding: 0.7rem 1rem;
-        }
+    width: auto;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.78rem;
+    padding: 0.45rem 0.9rem;
+}
+
         </style>
         """,
         unsafe_allow_html=True,
     )
+    
     
     
 # =========================
@@ -336,43 +351,44 @@ def render_card(row: pd.Series, rank: int):
             f'<div class="parking-name">{rank}. {row["facility_name"]}</div>',
             unsafe_allow_html=True,
         )
-        st.markdown(
-            f'<div class="badge" style="background:{badge_color};">Occupancy {fmt(row["occupancy_pct"])}%</div>',
-            unsafe_allow_html=True,
-        )
-
-        c1, c2 = st.columns(2)
-        with c1:
-            st.metric("Distance", f"{fmt(row['distance_km'], 2)} km")
-        with c2:
-            st.metric("Free parking", f"{fmt(row['free_pct'])}%")
-
-        c3, c4 = st.columns(2)
-        with c3:
-            st.metric("Available spots", fmt(row["available_spaces"], 0))
-        with c4:
-            st.metric("Capacity", fmt(row["parking_capacity"], 0))
-
-        opening_summary = row.get("opening_hours_summary")
-
-        if pd.isna(opening_summary) or str(opening_summary).strip() == "":
-            if pd.notna(row.get("open_24_7")) and bool(row.get("open_24_7")):
-                opening_summary = "24/7"
-            else:
-                opening_summary = "not available" 
-
-        st.caption(f"Opening hours: {opening_summary}")
 
         st.markdown(
             f"""
-            <a href="{maps_url}" target="_blank">
-                <button style="background-color:#16A34A;color:white;border:none;padding:12px 14px;border-radius:14px;font-weight:700;width:100%;cursor:pointer;">
-                    🧭 Navigate now
-                </button>
-            </a>
+            <div style="
+                display:inline-block;
+                background:{badge_color};
+                color:white;
+                font-weight:800;
+                font-size:1rem;
+                padding:8px 14px;
+                border-radius:999px;
+                margin-bottom:14px;
+            ">
+                {fmt(row["occupancy_pct"])}% full
+            </div>
             """,
             unsafe_allow_html=True,
         )
+
+        col1, col2 = st.columns([1.2, 1])
+
+        with col1:
+            st.markdown(
+                f"""
+                <div style="color:#374151; font-size:0.95rem; font-weight:600;">
+                    Available spots
+                </div>
+                <div style="color:#111827; font-size:2.8rem; font-weight:800; line-height:1;">
+                    {fmt(row["available_spaces"], 0)}
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        with col2:
+            st.write("")
+            st.write("")
+            st.link_button("🌍 Navigate", maps_url, use_container_width=True)
     
 
 
@@ -395,26 +411,22 @@ def main():
     st.set_page_config(page_title="Parking App", page_icon="🅿️", layout="centered")
     inject_mobile_css()
 
-    top_left, top_right = st.columns([2, 1])
-
-    with top_left:
-        st.markdown('<div class="app-title">🅿️ Smart Parking Finder</div>', unsafe_allow_html=True)
-        st.markdown('<div class="app-subtitle">Live recommendations for office parking.</div>', unsafe_allow_html=True)
-
-    with top_right:
-        if st.button("🔄 Refresh"):
-            with st.spinner("Fetching latest parking data..."):
-                try:
-                    refresh_live_data()
-                    load_data.clear()
-                    st.rerun()
-                except Exception as e:
-                    st.error(f"Refresh failed: {e}")
+    st.markdown('<div class="app-title">🅿️ Smart Parking Finder</div>', unsafe_allow_html=True)
+    st.markdown('<div class="app-subtitle">Live recommendations for office parking.</div>', unsafe_allow_html=True)
 
     st.markdown(
         f'<div class="small-pill">Last updated: {get_last_updated_text()}</div>',
         unsafe_allow_html=True,
     )
+
+    if st.button("🔄 Refresh to latest live data"):
+        with st.spinner("Fetching latest parking data..."):
+            try:
+                refresh_live_data()
+                load_data.clear()
+                st.rerun()
+            except Exception as e:
+                st.error(f"Refresh failed: {e}")
 
     file_mtime = get_file_mtime()
     if file_mtime == 0:
@@ -438,10 +450,10 @@ def main():
 
     office = st.selectbox("Choose office", offices)
 
-    under70, over70 = recommend_top3(df, office)
+    under50, over50 = recommend_top3(df, office)
 
-    show_cards("Best options under 70%", under70)
-    show_cards("Closest busy options", over70)
+    show_cards("Best options under 50%", under50)
+    show_cards("Closest busy options", over50)
 
     # st.markdown('<div class="section-title">📧 Share recommendation</div>', unsafe_allow_html=True)
     # email = st.text_input("", placeholder="example@company.com")
@@ -451,13 +463,13 @@ def main():
     #         st.warning("Enter an email first.")
     #     else:
     #         subject = f"Parking recommendation for {office}"
-    #         body = build_email_content(office, under70, over70)
+    #         body = build_email_content(office, under50, over50)
     #         mailto_link = build_mailto_link(email, subject, body)
 
     #         st.markdown(
     #             f"""
     #             <a href="{mailto_link}">
-    #                 <button style="background-color:#2563EB;color:white;border:none;padding:12px 14px;border-radius:14px;font-weight:700;width:100%;cursor:pointer;">
+    #                 <button style="background-color:#2563EB;color:white;border:none;padding:12px 14px;border-radius:14px;font-weight:500;width:100%;cursor:pointer;">
     #                     📨 Open email
     #                 </button>
     #             </a>
