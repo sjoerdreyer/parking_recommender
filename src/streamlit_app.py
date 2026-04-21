@@ -411,9 +411,36 @@ def main():
     st.set_page_config(page_title="Parking App", page_icon="🅿️", layout="centered")
     inject_mobile_css()
 
+    col1, col2 = st.columns([1, 2])
+
+    with col1:
+        logo_path = Path("assets/heroeslogo.png")
+
+        st.image(logo_path, width=90)
+
+    with col2:
+        st.markdown(
+            """
+            <div style="
+                display:flex;
+                align-items:center;
+                height:100%;
+                font-size:0.9rem;
+                color:#475569;
+                font-weight:600;
+            ">
+                Brought to you by the Heroes team
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        
+    st.markdown("---")
+    
     st.markdown('<div class="app-title">🅿️ Smart Parking Finder</div>', unsafe_allow_html=True)
     st.markdown('<div class="app-subtitle">Live recommendations for office parking.</div>', unsafe_allow_html=True)
 
+    
     st.markdown(
         f'<div class="small-pill">Last updated: {get_last_updated_text()}</div>',
         unsafe_allow_html=True,
@@ -455,27 +482,6 @@ def main():
     show_cards("Best options under 50%", under50)
     show_cards("Closest busy options", over50)
 
-    # st.markdown('<div class="section-title">📧 Share recommendation</div>', unsafe_allow_html=True)
-    # email = st.text_input("", placeholder="example@company.com")
-
-    # if st.button("Generate email"):
-    #     if not email:
-    #         st.warning("Enter an email first.")
-    #     else:
-    #         subject = f"Parking recommendation for {office}"
-    #         body = build_email_content(office, under50, over50)
-    #         mailto_link = build_mailto_link(email, subject, body)
-
-    #         st.markdown(
-    #             f"""
-    #             <a href="{mailto_link}">
-    #                 <button style="background-color:#2563EB;color:white;border:none;padding:12px 14px;border-radius:14px;font-weight:500;width:100%;cursor:pointer;">
-    #                     📨 Open email
-    #                 </button>
-    #             </a>
-    #             """,
-    #             unsafe_allow_html=True,
-    #         )
 
 
 
